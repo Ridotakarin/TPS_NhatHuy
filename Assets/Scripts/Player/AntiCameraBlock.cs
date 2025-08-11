@@ -15,10 +15,12 @@ public class AntiCameraBlock : MonoBehaviour
         var direction = -transform.forward;
         Ray lookingRay = new(transform.position, direction);
         Debug.DrawRay(transform.position, direction, Color.red, 5);
+        
         if (Physics.SphereCast(lookingRay, _radius, out var raycastHit,
             _cameraMaxDistance, _hitMask))
         {
             _camera.position = raycastHit.point;
+            Debug.Log(raycastHit.point);
         }
         else
         {
