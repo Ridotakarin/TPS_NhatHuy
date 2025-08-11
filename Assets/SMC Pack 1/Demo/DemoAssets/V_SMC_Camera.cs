@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Visyde{
-	public class V_SMC_Camera : MonoBehaviour {
+
+	public class V_SMC_Camera : MonoBehaviour 
+	{
 
 		// The handler of crosshair sprites:
 		public V_SMC_Handler crosshairHandler;
@@ -15,13 +16,16 @@ namespace Visyde{
 		// For the raycasting function:
 		Vector3 fireDirection;
 		Vector3 firePoint;
-
+	
 		// Use this for initialization
-		void Start () {
+		 void Start () {
 			// Lock and hide the cursor:
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
-		}
+        // Get component
+        
+
+        }
 
 		// Update is called once per frame
 		void Update () {
@@ -60,4 +64,4 @@ namespace Visyde{
 			Debug.DrawRay(firePoint, fireDirection, Color.green);
 		}
 	}
-}
+

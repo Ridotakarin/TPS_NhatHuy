@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Visyde{
+
 	public class V_Text : MonoBehaviour {
 
 		public Text crosshairNameText;
@@ -19,4 +19,4 @@ namespace Visyde{
 			crosshairNameText.text = handler.crossHairs [handler.curCrossHair].name;
 		}
 	}
-}
+

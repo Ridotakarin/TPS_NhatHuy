@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Visyde{
+
 	public class V_SMC_Handler : MonoBehaviour {
 
 		public Sprite[] crossHairs;
@@ -31,4 +31,3 @@ namespace Visyde{
 		}
 	}
 
-}
