@@ -85,7 +85,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetRotationOnMove(true);// Trả quyền quay cho nhân vật
             crossHair.SetActive(false);
             animator.SetBool("Aiming",false);
-            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
+            //animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
 
         }
     }

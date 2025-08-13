@@ -50,9 +50,7 @@ public class InputSettingScript : MonoBehaviour
     }
     public void OnReload(InputValue value)
     {
-        // Gán giá trị isPressed cho biến reload
-        // Hành động này sẽ trả về true khi nhấn và false khi nhả
-        reload = value.isPressed;
+        ReloadInput(value.isPressed);
     }
 #endif
 
