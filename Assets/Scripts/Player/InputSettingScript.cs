@@ -9,12 +9,17 @@ public class InputSettingScript : MonoBehaviour
     public Vector2 move;
     public Vector2 look;
     public bool jump;
-    public bool aim;
+    public bool aiming;
+    public bool walk;
     public bool sprint;
     public bool dodge;
 
     [Header("Movement Setting")]
     public bool analogMovement;
+
+    [Header("Mouse Cursor Settings")]
+    public bool cursorLocked = true;
+    public bool cursorInputForLook = true;
 
     public void OnMove(InputValue value)
     {
@@ -32,9 +37,13 @@ public class InputSettingScript : MonoBehaviour
     {
         SprintInput(value.isPressed);
     }
-    public void OnAim(InputValue value)
+    public void OnWalk(InputValue value)
     {
-        AimInput(value.isPressed);
+        WalkInput(value.isPressed);
+    }
+    public void OnAiming(InputValue value)
+    {
+        AimingInput(value.isPressed);
     }
     public void OnDodge(InputValue value)
     {
@@ -62,13 +71,22 @@ public class InputSettingScript : MonoBehaviour
     {
         sprint = newSprintState;
     }
-    public void AimInput(bool newAimState)
+    public void WalkInput(bool newWalkState)
     {
-        aim = newAimState;
+        walk = newWalkState;
+    }
+    public void AimingInput(bool newAimState)
+    {
+        aiming = newAimState;
     }
     public void DodgeInput(bool newDodgeState)
     {
         dodge = newDodgeState;
+    }
+
+    private void SetCursorState(bool newState)
+    {
+        Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
 }
