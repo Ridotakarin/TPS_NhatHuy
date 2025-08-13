@@ -158,9 +158,11 @@ public class ThirdPersonController : MonoBehaviour
             JumpAndGravity();
             GroundedCheck();
             Move();
-        }
+        Debug.Log(sensitivity);
 
-        private void LateUpdate()
+    }
+
+    private void LateUpdate()
         {
             CameraRotation();
         }
@@ -195,11 +197,11 @@ public class ThirdPersonController : MonoBehaviour
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+            ////Don't multiply mouse input by Time.deltaTime;
+            //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier * sensitivity;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * sensitivity;
+                _cinemachineTargetYaw += _input.look.x * Time.deltaTime * sensitivity;
+                _cinemachineTargetPitch += _input.look.y * Time.deltaTime * sensitivity;
             }
 
             // clamp our rotations so our values are limited 360 degrees
