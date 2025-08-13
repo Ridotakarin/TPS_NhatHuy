@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -12,7 +12,7 @@ public class InputSettingScript : MonoBehaviour
     public bool aiming;
     public bool walk;
     public bool sprint;
-    public bool dodge;
+    public bool reload;
 
     [Header("Movement Setting")]
     public bool analogMovement;
@@ -48,9 +48,11 @@ public class InputSettingScript : MonoBehaviour
     {
         AimingInput(value.isPressed);
     }
-    public void OnDodge(InputValue value)
+    public void OnReload(InputValue value)
     {
-        DodgeInput(value.isPressed);
+        // Gán giá trị isPressed cho biến reload
+        // Hành động này sẽ trả về true khi nhấn và false khi nhả
+        reload = value.isPressed;
     }
 #endif
 
@@ -82,9 +84,9 @@ public class InputSettingScript : MonoBehaviour
     {
         aiming = newAimState;
     }
-    public void DodgeInput(bool newDodgeState)
+    public void ReloadInput(bool newReloadState)
     {
-        dodge = newDodgeState;
+        reload = newReloadState;
     }
     private void OnApplicationFocus(bool hasFocus)
     {

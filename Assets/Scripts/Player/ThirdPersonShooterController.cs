@@ -12,12 +12,14 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private GameObject crossHair;
 
+
     [SerializeField] private ThirdPersonController thirdPersonController;
 
     private InputSettingScript inputSettings;
     // Tham chiếu đến Cinemachine Third Person Aim
     private CinemachineCameraOffset offsetAim;
     private CinemachineHardLookAt aimCamera;
+    private Animator animator;
 
     private float targetFov;
     private void Awake()
@@ -27,11 +29,13 @@ public class ThirdPersonShooterController : MonoBehaviour
         aimVirtualCamera = GameObject.FindAnyObjectByType<CinemachineCamera>();
         offsetAim = aimVirtualCamera.GetComponent<CinemachineCameraOffset>();
         crossHair = GameObject.Find("CrossHair");
+        animator = GetComponent<Animator>();
 
     }
 
     private void Update()
     {
+
         MouseAim();
     }
     
@@ -59,24 +63,32 @@ public class ThirdPersonShooterController : MonoBehaviour
             worldAimTarget.y = transform.position.y;
             Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
 
+            offsetAim.enabled = true;
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
             crossHair.SetActive(true);
-            // Cấu hình Cinemachine
-            // offsetAim.enabled = true; // Bạn có thể tắt cái này nếu muốn dùng logic offset trực tiếp
+            animator.SetBool("Aiming", true);
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1),1f,Time.deltaTime *10f));
+            
             // Điều chỉnh FOV camera khi ngắm
-            aimVirtualCamera.Lens.FieldOfView = Mathf.Lerp(aimVirtualCamera.Lens.FieldOfView, 20f, Time.deltaTime * transitionSpeed);
+            aimVirtualCamera.Lens.FieldOfView = Mathf.Lerp(aimVirtualCamera.Lens.FieldOfView, 15f, Time.deltaTime * transitionSpeed);
             thirdPersonController.SetSensitivity(aimSensitivity);
+            thirdPersonController.SetRotationOnMove(false);// Kiểm soát không cho nhân vật tự ý quay
+
 
         }
         else
         {
-            // Tắt các tính năng ngắm
-            // offsetAim.enabled = false;
+            offsetAim.enabled=false;
             // Chỉnh FOV camera về bình thường
             aimVirtualCamera.Lens.FieldOfView = Mathf.Lerp(aimVirtualCamera.Lens.FieldOfView, 40f, Time.deltaTime * transitionSpeed);
             thirdPersonController.SetSensitivity(nomalSensitivity);
+            thirdPersonController.SetRotationOnMove(true);// Trả quyền quay cho nhân vật
             crossHair.SetActive(false);
+            animator.SetBool("Aiming",false);
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
+
         }
     }
+    
 }
 

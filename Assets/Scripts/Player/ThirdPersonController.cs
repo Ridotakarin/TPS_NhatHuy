@@ -74,8 +74,10 @@ public class ThirdPersonController : MonoBehaviour
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        
+
         // cinemachine
-        private float _cinemachineTargetYaw;
+    private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
 
         // player
@@ -104,6 +106,8 @@ public class ThirdPersonController : MonoBehaviour
         private CharacterController _controller;
         private InputSettingScript _input;
         private GameObject _mainCamera;
+        private bool _moveRotation;
+    
 
         private const float _threshold = 0.01f;
 
@@ -219,6 +223,13 @@ public class ThirdPersonController : MonoBehaviour
             float targetSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+
+        if (_animator != null && _animator.GetBool("Aiming"))
+        {
+            targetSpeed = walkSpeed;
+        }
+        else
+        {
             if (_input.sprint)
             {
                 targetSpeed = sprintSpeed;
@@ -231,6 +242,9 @@ public class ThirdPersonController : MonoBehaviour
             {
                 targetSpeed = moveSpeed;
             }
+        }
+
+        
         // if there is no input, set the target speed to 0
         if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
@@ -273,7 +287,9 @@ public class ThirdPersonController : MonoBehaviour
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            if (_moveRotation)    
+            { 
+                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f); }
             }
 
 
@@ -380,9 +396,14 @@ public class ThirdPersonController : MonoBehaviour
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
         }
+    
        public void SetSensitivity(float newSensitivity)
     {
         sensitivity = newSensitivity;
+    }
+    public void SetRotationOnMove(bool newMoveRotation)
+    {
+        _moveRotation = newMoveRotation;
     }
 
 

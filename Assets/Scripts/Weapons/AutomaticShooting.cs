@@ -22,5 +22,13 @@ public class AutomaticShooting : Shooting
 
     private bool FinishCooldown() => Time.time - _lastShotTime >= _cooldown;
 
-    private void Shoot() => OnShoot.Invoke();
+    public override void Shoot() => OnShoot.Invoke();
+    public override void AmmoCount()
+    {
+        
+    }
+    public override void Reload()
+    {
+
+    }
 }

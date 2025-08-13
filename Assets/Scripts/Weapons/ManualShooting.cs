@@ -16,5 +16,13 @@ public class ManualShooting : Shooting
         }
     }
 
-    private void Shoot() => OnShoot.Invoke();
+    public override void Shoot() => OnShoot.Invoke();
+    public override void AmmoCount()
+    {
+
+    }
+    public override void Reload()
+    {
+
+    }
 }
