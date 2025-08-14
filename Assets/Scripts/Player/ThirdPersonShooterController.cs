@@ -11,6 +11,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private float transitionSpeed = 10f; // Tốc độ chuyển đổi
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private GameObject crossHair;
+    [SerializeField] private GameObject _aimLight;
+    [SerializeField] private GameObject _flashLight;
 
 
     [SerializeField] private ThirdPersonController thirdPersonController;
@@ -21,6 +23,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     private CinemachineHardLookAt aimCamera;
     private Animator animator;
 
+
     private float targetFov;
     private void Awake()
     {
@@ -29,6 +32,8 @@ public class ThirdPersonShooterController : MonoBehaviour
         aimVirtualCamera = GameObject.FindAnyObjectByType<CinemachineCamera>();
         offsetAim = aimVirtualCamera.GetComponent<CinemachineCameraOffset>();
         crossHair = GameObject.Find("CrossHair");
+        _aimLight = GameObject.Find("Aim Light");
+        _flashLight = GameObject.Find("Flash Light");
         animator = GetComponent<Animator>();
 
     }
@@ -56,7 +61,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
 
         // Kiểm tra chế độ ngắm
-        if (inputSettings.aiming)
+        if (inputSettings.aiming )
         {
             // Điều chỉnh hướng nhìn của character
             Vector3 worldAimTarget = mouseWorldPosition;
@@ -64,6 +69,8 @@ public class ThirdPersonShooterController : MonoBehaviour
             Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
 
             offsetAim.enabled = true;
+            _aimLight.SetActive(true);
+            _flashLight.SetActive(false);
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
             crossHair.SetActive(true);
             animator.SetBool("Aiming", true);
@@ -84,7 +91,10 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetSensitivity(nomalSensitivity);
             thirdPersonController.SetRotationOnMove(true);// Trả quyền quay cho nhân vật
             crossHair.SetActive(false);
+            _aimLight.SetActive(false);
+            _flashLight.SetActive(true);
             animator.SetBool("Aiming",false);
+
             //animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
 
         }

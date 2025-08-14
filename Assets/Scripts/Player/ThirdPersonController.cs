@@ -230,6 +230,8 @@ public class ThirdPersonController : MonoBehaviour
         }
         else
         {
+            _animator.SetLayerWeight(1, Mathf.Lerp(_animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
+
             if (_input.sprint)
             {
                 targetSpeed = sprintSpeed;

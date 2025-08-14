@@ -52,8 +52,12 @@ public class ManualShooting : Shooting
             isReloading = true;
             Debug.Log("Bắt đầu nạp đạn (súng bán tự động)...");
             // Kích hoạt animation reload ở đây
-            // animator.SetTrigger("Reload");
+            _animator.SetBool("Reload", true);
             StartCoroutine(ReloadCoroutine());
+        }
+        else if (totalClips <= 0)
+        {
+            Debug.Log("Hết đạn dự trữ!");
         }
     }
 
@@ -61,7 +65,6 @@ public class ManualShooting : Shooting
     private IEnumerator ReloadCoroutine()
     {
         _animator.SetLayerWeight(1, Mathf.Lerp(_animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
-        _animator.SetBool("Reload", true);
         yield return new WaitForSeconds(reloadTime);
         _animator.SetBool("Reload", false);
 
