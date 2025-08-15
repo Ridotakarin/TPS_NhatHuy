@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 // Đây là lớp cơ sở cho tất cả các loại súng
 public abstract class Shooting : MonoBehaviour
@@ -11,10 +12,15 @@ public abstract class Shooting : MonoBehaviour
     [Header("Ammo Settings")]
     [Tooltip("Số đạn tối đa trong một băng")]
     public int maxAmmoInClip;
+    [Tooltip("Số đạn hiện tại")]
+    public int currentAmmoInClip;
     [Tooltip("Số băng đạn dự trữ")]
     public int totalClips;
     [Tooltip("Thời gian để nạp đạn")]
     public float reloadTime;
+    [Tooltip("Cập nhật text súng")]
+    public Text ammoText;
+    public Text magazineText;
 
     // Biến private để theo dõi số đạn hiện tại
     protected int currentAmmo;
@@ -38,4 +44,5 @@ public abstract class Shooting : MonoBehaviour
             Reload();
         }
     }
+    public abstract void UpdateText();
 }

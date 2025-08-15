@@ -1,5 +1,6 @@
 ﻿using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -17,6 +18,19 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     [SerializeField] private ThirdPersonController thirdPersonController;
 
+
+    // =========================================================================
+    // Thêm các biến để quản lý súng
+    [Header("Gun Switching")]
+    [SerializeField] private GameObject _normalGun;
+    [SerializeField] private GameObject _powerGun;
+    private GameObject _currentGun;
+    private bool _hasPowerGun = false; // Biến để kiểm tra xem người chơi đã có súng PowerGun chưa
+
+    // UnityEvent để các script khác, như UI, có thể lắng nghe
+    public UnityEvent<GameObject> OnGunSwitched;
+
+
     private InputSettingScript inputSettings;
     // Tham chiếu đến Cinemachine Third Person Aim
     private CinemachineCameraOffset offsetAim;
@@ -25,6 +39,9 @@ public class ThirdPersonShooterController : MonoBehaviour
 
 
     private float targetFov;
+
+
+    
     private void Awake()
     {
         inputSettings = GetComponent<InputSettingScript>();
@@ -37,11 +54,37 @@ public class ThirdPersonShooterController : MonoBehaviour
         animator = GetComponent<Animator>();
 
     }
+    private void Start()
+    {
+        // Khởi tạo trạng thái súng ban đầu
+        if (_normalGun != null)
+        {
+            _currentGun = _normalGun;
+            _normalGun.SetActive(true);
+        }
+        if (_powerGun != null)
+        {
+            _powerGun.SetActive(false);
+        }
+
+        // Kích hoạt sự kiện để UI cập nhật lần đầu
+        if (OnGunSwitched != null)
+        {
+            OnGunSwitched.Invoke(_currentGun);
+        }
+        ObtainPowerGun();
+    }
 
     private void Update()
     {
 
         MouseAim();
+        
+        // Kiểm tra phím Q và xem người chơi đã có PowerGun chưa
+        if (Input.GetKeyDown(KeyCode.Q) && _hasPowerGun)
+        {
+            SwitchGuns();
+        }
     }
     
     private void MouseAim()
@@ -98,7 +141,36 @@ public class ThirdPersonShooterController : MonoBehaviour
             //animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
 
         }
+
     }
-    
+
+    private void SwitchGuns()
+    {
+        if (_currentGun == _normalGun)
+        {
+            _currentGun = _powerGun;
+            _normalGun.SetActive(false);
+            _powerGun.SetActive(true);
+        }
+        else
+        {
+            _currentGun = _normalGun;
+            _normalGun.SetActive(true);
+            _powerGun.SetActive(false);
+        }
+
+        // Kích hoạt sự kiện để UI cập nhật
+        if (OnGunSwitched != null)
+        {
+            OnGunSwitched.Invoke(_currentGun);
+        }
+    }
+
+    // Phương thức công khai để các script khác có thể gọi khi người chơi nhận PowerGun
+    public void ObtainPowerGun()
+    {
+        _hasPowerGun = true;
+    }
+
 }
 

@@ -407,6 +407,8 @@ public class ThirdPersonController : MonoBehaviour
     {
         _moveRotation = newMoveRotation;
     }
+    
+    
 
 
-    }
+}

@@ -9,6 +9,7 @@ public class AutomaticShooting : Shooting
     [SerializeField] private InputActionReference _shootAction;
     [SerializeField] private float _cooldown;
     [SerializeField] private Animator _animator;
+    
 
     private float _lastShotTime;
 
@@ -34,9 +35,11 @@ public class AutomaticShooting : Shooting
             Shoot();
             _lastShotTime = Time.time;
             currentAmmo--;
+            currentAmmoInClip = currentAmmo;
         }
         // Kiểm tra và tự động nạp đạn khi hết đạn
         CheckAndReload();
+        UpdateText();
     }
 
     private bool FinishCooldown() => Time.time - _lastShotTime >= _cooldown;
@@ -73,5 +76,10 @@ public class AutomaticShooting : Shooting
         totalClips--;
         isReloading = false;
         Debug.Log("Nạp đạn xong! Đạn hiện tại: " + currentAmmo + ", Băng đạn dự trữ: " + totalClips);
+    }
+    public override void UpdateText()
+    {
+        ammoText.text = "Ammo: "+currentAmmo.ToString();
+        magazineText.text = "Magazine: "+totalClips.ToString();
     }
 }

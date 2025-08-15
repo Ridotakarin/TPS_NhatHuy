@@ -32,6 +32,7 @@ public class ManualShooting : Shooting
         {
             Shoot();
             currentAmmo--;
+            currentAmmoInClip = currentAmmo;
         }
         // Kiểm tra và tự động nạp đạn khi hết đạn
         CheckAndReload();
@@ -73,5 +74,10 @@ public class ManualShooting : Shooting
         totalClips--;
         isReloading = false;
         Debug.Log("Nạp đạn xong! Đạn hiện tại: " + currentAmmo + ", Băng đạn dự trữ: " + totalClips);
+    }
+    public override void UpdateText()
+    {
+        ammoText.text = "Ammo: " + currentAmmo.ToString();
+        magazineText.text = "Magazine: " + totalClips.ToString();
     }
 }
