@@ -51,7 +51,7 @@ public class UI_Gun : MonoBehaviour
         }
         else if (_currentManualGun != null)
         {
-            Debug.Log   
+            
             _ammoText.text = _currentManualGun.currentAmmoInClip.ToString();
             _magazineText.text = _currentManualGun.totalClips.ToString();
         }
