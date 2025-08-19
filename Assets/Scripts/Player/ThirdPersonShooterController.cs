@@ -9,84 +9,109 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private CinemachineCamera aimVirtualCamera;
     [SerializeField] private float nomalSensitivity;
     [SerializeField] private float aimSensitivity;
-    [SerializeField] private float transitionSpeed = 10f; // Tốc độ chuyển đổi
+    [SerializeField] private float transitionSpeed = 10f;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private GameObject crossHair;
+    [SerializeField] private GameObject normalCH;
+    [SerializeField] private GameObject powerCH;
     [SerializeField] private GameObject _aimLight;
     [SerializeField] private GameObject _flashLight;
 
-
     [SerializeField] private ThirdPersonController thirdPersonController;
-
+    [SerializeField] private Animator animator;
 
     // =========================================================================
-    // Thêm các biến để quản lý súng
     [Header("Gun Switching")]
     [SerializeField] private GameObject _normalGun;
     [SerializeField] private GameObject _powerGun;
-    private GameObject _currentGun;
-    private bool _hasPowerGun = false; // Biến để kiểm tra xem người chơi đã có súng PowerGun chưa
+
+    [SerializeField] private Shooting _normalGunScript;
+    [SerializeField] private Shooting _powerGunScript;
+    private Shooting _currentGunScript;
+    private bool _hasPowerGun = false;
 
     // UnityEvent để các script khác, như UI, có thể lắng nghe
     public UnityEvent<GameObject> OnGunSwitched;
 
-
     private InputSettingScript inputSettings;
-    // Tham chiếu đến Cinemachine Third Person Aim
-    private CinemachineCameraOffset offsetAim;
-    private CinemachineHardLookAt aimCamera;
-    private Animator animator;
 
+    // Tham chiếu đến Cinemachine
+    private CinemachineCameraOffset offsetAim;
 
     private float targetFov;
 
-
-    
     private void Awake()
     {
+        // Lấy các component từ các đối tượng đã được gán sẵn
         inputSettings = GetComponent<InputSettingScript>();
         thirdPersonController = GetComponent<ThirdPersonController>();
+        animator = GetComponent<Animator>();
         aimVirtualCamera = GameObject.FindAnyObjectByType<CinemachineCamera>();
-        offsetAim = aimVirtualCamera.GetComponent<CinemachineCameraOffset>();
-        crossHair = GameObject.Find("CrossHair");
+
         _aimLight = GameObject.Find("Aim Light");
         _flashLight = GameObject.Find("Flash Light");
-        animator = GetComponent<Animator>();
 
-    }
-    private void Start()
-    {
-        // Khởi tạo trạng thái súng ban đầu
+
+        if (aimVirtualCamera != null)
+        {
+            offsetAim = aimVirtualCamera.GetComponent<CinemachineCameraOffset>();
+        }
+
+        // Lấy các script Shooting từ GameObject súng
         if (_normalGun != null)
         {
-            _currentGun = _normalGun;
-            _normalGun.SetActive(true);
+            _normalGunScript = _normalGun.GetComponent<Shooting>();
+            
         }
         if (_powerGun != null)
         {
-            _powerGun.SetActive(false);
+            _powerGunScript = _powerGun.GetComponent<Shooting>();
         }
 
-        // Kích hoạt sự kiện để UI cập nhật lần đầu
+        
+    }
+
+    private void Start()
+    {
+        // Khởi tạo trạng thái súng ban đầu
+        if (_normalGunScript != null)
+        {
+            _currentGunScript = _normalGunScript;
+            _normalGun.SetActive(true);
+            crossHair = normalCH;
+            _normalGunScript.OnEquip();
+        }
+        if (_powerGunScript != null)
+        {
+            _powerGun.SetActive(false);
+            _powerGunScript.OnUnequip();
+        }
+
         if (OnGunSwitched != null)
         {
-            OnGunSwitched.Invoke(_currentGun);
+            OnGunSwitched.Invoke(_currentGunScript.gameObject);
         }
+
         ObtainPowerGun();
     }
-
     private void Update()
     {
-
         MouseAim();
-        
-        // Kiểm tra phím Q và xem người chơi đã có PowerGun chưa
-        if (Input.GetKeyDown(KeyCode.Q) && _hasPowerGun)
+
+        // Chuyển đổi súng bằng phím 1 và 2
+        if (Input.GetKeyDown(KeyCode.Alpha1) && _currentGunScript != _normalGunScript)
         {
-            SwitchGuns();
+            SwitchGuns(_normalGunScript);
+            crossHair = normalCH;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && _hasPowerGun && _currentGunScript != _powerGunScript)
+        {
+            SwitchGuns(_powerGunScript);
+            crossHair = powerCH;
+
         }
     }
-    
+
     private void MouseAim()
     {
         Vector3 mouseWorldPosition = Vector3.zero;
@@ -95,82 +120,104 @@ public class ThirdPersonShooterController : MonoBehaviour
         Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
 
-        // Tạo một lớp layer mask cho các đối tượng mà tia ngắm có thể va chạm
-        
-
         if (Physics.Raycast(ray, out RaycastHit hit, 999f, layerMask))
         {
             mouseWorldPosition = hit.point;
         }
 
-        // Kiểm tra chế độ ngắm
-        if (inputSettings.aiming )
+        if (inputSettings.aiming)
         {
-            // Điều chỉnh hướng nhìn của character
             Vector3 worldAimTarget = mouseWorldPosition;
             worldAimTarget.y = transform.position.y;
             Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
 
-            offsetAim.enabled = true;
-            _aimLight.SetActive(true);
-            _flashLight.SetActive(false);
+            if (offsetAim != null)
+            {
+                offsetAim.enabled = true;
+            }
+            if (_aimLight != null)
+            {
+                _aimLight.SetActive(true);
+            }
+            if (_flashLight != null)
+            {
+                _flashLight.SetActive(false);
+            }
+
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
-            crossHair.SetActive(true);
+
+            if (crossHair != null)
+            {
+                crossHair.SetActive(true);
+            }
+
             animator.SetBool("Aiming", true);
-            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1),1f,Time.deltaTime *10f));
-            
-            // Điều chỉnh FOV camera khi ngắm
-            aimVirtualCamera.Lens.FieldOfView = Mathf.Lerp(aimVirtualCamera.Lens.FieldOfView, 15f, Time.deltaTime * transitionSpeed);
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
+
+            if (aimVirtualCamera != null)
+            {
+                aimVirtualCamera.Lens.FieldOfView = Mathf.Lerp(aimVirtualCamera.Lens.FieldOfView, 15f, Time.deltaTime * transitionSpeed);
+            }
             thirdPersonController.SetSensitivity(aimSensitivity);
-            thirdPersonController.SetRotationOnMove(false);// Kiểm soát không cho nhân vật tự ý quay
-
-
+            thirdPersonController.SetRotationOnMove(false);
         }
         else
         {
-            offsetAim.enabled=false;
-            // Chỉnh FOV camera về bình thường
-            aimVirtualCamera.Lens.FieldOfView = Mathf.Lerp(aimVirtualCamera.Lens.FieldOfView, 40f, Time.deltaTime * transitionSpeed);
+            if (offsetAim != null)
+            {
+                offsetAim.enabled = false;
+            }
+
+            if (aimVirtualCamera != null)
+            {
+                aimVirtualCamera.Lens.FieldOfView = Mathf.Lerp(aimVirtualCamera.Lens.FieldOfView, 40f, Time.deltaTime * transitionSpeed);
+            }
+
             thirdPersonController.SetSensitivity(nomalSensitivity);
-            thirdPersonController.SetRotationOnMove(true);// Trả quyền quay cho nhân vật
-            crossHair.SetActive(false);
-            _aimLight.SetActive(false);
-            _flashLight.SetActive(true);
-            animator.SetBool("Aiming",false);
+            thirdPersonController.SetRotationOnMove(true);
 
-            //animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
+            if (crossHair != null)
+            {
+                crossHair.SetActive(false);
+            }
+            if (_aimLight != null)
+            {
+                _aimLight.SetActive(false);
+            }
+            if (_flashLight != null)
+            {
+                _flashLight.SetActive(true);
+            }
 
+            animator.SetBool("Aiming", false);
         }
-
     }
 
-    private void SwitchGuns()
+    private void SwitchGuns(Shooting newGunScript)
     {
-        if (_currentGun == _normalGun)
+        if (_currentGunScript == null) return;
+
+        // Vô hiệu hóa súng cũ và dừng coroutine nạp đạn
+        _currentGunScript.OnUnequip();
+        _currentGunScript.gameObject.SetActive(false);
+
+        // Trang bị súng mới
+        _currentGunScript = newGunScript;
+        if (_currentGunScript != null)
         {
-            _currentGun = _powerGun;
-            _normalGun.SetActive(false);
-            _powerGun.SetActive(true);
-        }
-        else
-        {
-            _currentGun = _normalGun;
-            _normalGun.SetActive(true);
-            _powerGun.SetActive(false);
+            _currentGunScript.gameObject.SetActive(true);
+            _currentGunScript.OnEquip();
         }
 
         // Kích hoạt sự kiện để UI cập nhật
         if (OnGunSwitched != null)
         {
-            OnGunSwitched.Invoke(_currentGun);
+            OnGunSwitched.Invoke(_currentGunScript.gameObject);
         }
     }
 
-    // Phương thức công khai để các script khác có thể gọi khi người chơi nhận PowerGun
     public void ObtainPowerGun()
     {
         _hasPowerGun = true;
     }
-
 }
-

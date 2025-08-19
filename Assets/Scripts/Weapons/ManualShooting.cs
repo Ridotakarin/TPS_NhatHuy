@@ -9,32 +9,46 @@ public class ManualShooting : Shooting
     [SerializeField] private InputActionReference _shootAction;
     [SerializeField] private Animator _animator;
 
-
+    private InputSettingScript inputSettings;
     // Constructor để khởi tạo các giá trị
     private void Awake()
     {
         _animator = GameObject.FindAnyObjectByType<ThirdPersonController>().GetComponent<Animator>();
+        inputSettings = GameObject.FindAnyObjectByType<InputSettingScript>();
+
 
         // Số đạn mặc định
         maxAmmoInClip = 1;
         currentAmmo = maxAmmoInClip;
         // Số băng đạn dự trữ
-        totalClips = 5;
+        totalClips = 10;
         // Thời gian nạp đạn
         reloadTime = 3f;
+        totalAmmo = maxAmmoInClip * totalClips ;
+
+        UpdateText();
 
     }
 
     private void Update()
     {
-        // Bắn khi nút được nhấn
-        if (_shootAction.action.triggered && currentAmmo > 0 && !isReloading)
+        if (_shootAction.action.triggered && currentAmmo > 0 && !isReloading && inputSettings.aiming)
         {
             Shoot();
             currentAmmo--;
             currentAmmoInClip = currentAmmo;
+            UpdateText();
         }
-        // Kiểm tra và tự động nạp đạn khi hết đạn
+
+        if (currentAmmo < maxAmmoInClip)
+        {
+            if (inputSettings.reload && !isReloading && totalAmmo > 0)
+            {
+                Reload();
+            }
+        }
+        else inputSettings.reload = false;
+
         CheckAndReload();
     }
 
@@ -48,7 +62,7 @@ public class ManualShooting : Shooting
     public override void Reload()
     {
         // Nếu có băng đạn dự trữ và chưa đang nạp, bắt đầu nạp
-        if (totalClips > 0 && !isReloading)
+        if (totalAmmo > 0 && !isReloading)
         {
             isReloading = true;
             Debug.Log("Bắt đầu nạp đạn (súng bán tự động)...");
@@ -56,10 +70,11 @@ public class ManualShooting : Shooting
             _animator.SetBool("Reload", true);
             StartCoroutine(ReloadCoroutine());
         }
-        else if (totalClips <= 0)
+        else if (totalAmmo <= 0)
         {
             Debug.Log("Hết đạn dự trữ!");
         }
+        inputSettings.reload = false;
     }
 
     // Coroutine để xử lý thời gian nạp đạn
@@ -69,15 +84,21 @@ public class ManualShooting : Shooting
         yield return new WaitForSeconds(reloadTime);
         _animator.SetBool("Reload", false);
 
-        // Nạp đạn xong, cập nhật số đạn
-        currentAmmo = maxAmmoInClip;
+
+        nextAmmo = maxAmmoInClip - currentAmmo;
+        currentAmmo = nextAmmo;
+        totalAmmo -= nextAmmo;
         totalClips--;
+
+
         isReloading = false;
-        Debug.Log("Nạp đạn xong! Đạn hiện tại: " + currentAmmo + ", Băng đạn dự trữ: " + totalClips);
+        // Gán giá trị vào biến public
+        currentAmmoInClip = currentAmmo;
+        UpdateText(); // <-- Gọi UpdateText() sau khi nạp đạn xong
     }
     public override void UpdateText()
     {
-        ammoText.text = "Ammo: " + currentAmmo.ToString();
-        magazineText.text = "Magazine: " + totalClips.ToString();
+        ammoText.text = "Ammo: " + currentAmmoInClip.ToString();
+        magazineText.text = "Total: " + totalAmmo.ToString();
     }
 }

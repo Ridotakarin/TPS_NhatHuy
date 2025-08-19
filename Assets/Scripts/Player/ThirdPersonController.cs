@@ -196,28 +196,32 @@ public class ThirdPersonController : MonoBehaviour
             }
         }
 
-        private void CameraRotation()
+    private void CameraRotation()
+    {
+        // if there is an input and camera position is not fixed
+        if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
         {
-            // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-            {
-            ////Don't multiply mouse input by Time.deltaTime;
-            //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+            // Don't multiply mouse input by Time.deltaTime;
+            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * Time.deltaTime * sensitivity;
-                _cinemachineTargetPitch += _input.look.y * Time.deltaTime * sensitivity;
-            }
+            // Determine sensitivity based on whether the player is aiming
+            float sensitivity = _input.aiming ? 0.1f : 1.0f;
 
-            // clamp our rotations so our values are limited 360 degrees
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-            // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+            // Apply camera rotation based on input and sensitivity
+            _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier * sensitivity;
+            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * sensitivity;
         }
 
-        private void Move()
+        // clamp our rotations so our values are limited 360 degrees
+        _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+        _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+
+        // Cinemachine will follow this target
+        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
+            _cinemachineTargetYaw, 0.0f);
+    }
+
+    private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed;

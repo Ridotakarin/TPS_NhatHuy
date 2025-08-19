@@ -12,6 +12,10 @@ public abstract class Shooting : MonoBehaviour
     [Header("Ammo Settings")]
     [Tooltip("Số đạn tối đa trong một băng")]
     public int maxAmmoInClip;
+    [Tooltip("Tổng số đạn của sungs")]
+    public int totalAmmo;
+    [Tooltip("Số đạn cần nạp")]
+    public int nextAmmo;
     [Tooltip("Số đạn hiện tại")]
     public int currentAmmoInClip;
     [Tooltip("Số băng đạn dự trữ")]
@@ -44,5 +48,23 @@ public abstract class Shooting : MonoBehaviour
             Reload();
         }
     }
+    public void OnEquip()
+    {
+        // Khi súng được trang bị
+        this.enabled = true; 
+        UpdateText();
+    }
+
+    public void OnUnequip()
+    {
+        // Khi súng bị tháo
+        this.enabled = false;
+        if (isReloading)
+        {
+            StopAllCoroutines();
+            isReloading = false;
+        }
+    }
+
     public abstract void UpdateText();
 }
