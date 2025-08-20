@@ -53,6 +53,7 @@ public class AutomaticShooting : Shooting
     // Ghi đè phương thức Shoot()
     public override void Shoot()
     {
+        AudioManager.Instance.Bullet();
         OnShoot.Invoke();
     }
 

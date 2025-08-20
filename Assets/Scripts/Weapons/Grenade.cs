@@ -15,6 +15,7 @@ public class Grenade : MonoBehaviour
 
     private void PushNearbyObjects()
     {
+        
         var victims = Physics.OverlapSphere(transform.position, _explosionRadius);
         foreach(var victim in victims)
         {
@@ -29,5 +30,9 @@ public class Grenade : MonoBehaviour
                 cube.Explode(_explosionForce, transform.position, _explosionRadius);
             }
         }
+    }
+    private void OnDestroy()
+    {
+        AudioManager.Instance.Explosion();
     }
 }

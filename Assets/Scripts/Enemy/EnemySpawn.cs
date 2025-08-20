@@ -13,7 +13,7 @@ public class EnemySpawn : MonoBehaviour
     private List<GameObject> _enemysAlive = new List<GameObject>();
     
     private float _nextSpawnTime;
-    private float _groundSpawnCooldown = 7f;
+    private float _groundSpawnCooldown = 5f;
     void Start()
     {
         

@@ -4,6 +4,7 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public Mob mob;
+    public Mutant mutant;
     public Transform targetPlayer;
     public float chaseDistance = 15f;
     public float attackDistance = 2f;
@@ -24,14 +25,28 @@ public class EnemyAI : MonoBehaviour
             GameObject player = GameObject.Find("Space_Solider");
             if (player != null) targetPlayer = player.transform;
         }
-        mob = GetComponent<Mob>();
+        if (mob == null)
+        {
+            mob = GetComponent<Mob>();
+        }
+        if (mutant == null)
+        {
+            mutant = GetComponent<Mutant>();
+        }
     }
 
     void Update()
     {
         
-        if(mob.currentHealth <= 0) SetDead();
+        if(mob != null)
+        {
+            if (mob.currentHealth <= 0) SetDead();
+        }
 
+        if (mutant != null)
+        {
+            if (mutant.currentHealth <= 0) SetDead();
+        }
         if (isDead) return;
 
         if (targetPlayer == null) return;

@@ -47,6 +47,7 @@ public class ManualShooting : Shooting
     // Ghi đè phương thức Shoot()
     public override void Shoot()
     {
+        AudioManager.Instance.Plasma();
         OnShoot.Invoke();
     }
 

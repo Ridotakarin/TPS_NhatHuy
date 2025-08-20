@@ -12,5 +12,6 @@ public class GrenadeLauncher : MonoBehaviour
         bullet.linearVelocity = _firingPos.forward * _bulletSpeed;
         Destroy(bullet.gameObject, 10f);
     }
+    
 }
     

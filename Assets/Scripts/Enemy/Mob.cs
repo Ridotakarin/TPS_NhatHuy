@@ -9,7 +9,7 @@ public class Mob : Enemy
     [SerializeField] private Animator _animator;
     private float lerpSpeed = 0.01f;
 
-    public UnityEvent OnDead;
+    
 
     void Start()
     {
@@ -29,6 +29,7 @@ public class Mob : Enemy
         UpdateHealth();
         if(currentHealth <= 0)
         {
+            AudioManager.Instance.ZomDead();
             DeadState();
                 
             Destroy(gameObject,5f);
@@ -58,6 +59,6 @@ public class Mob : Enemy
         {
             _animator.Play("Z_FallingForward");
         }
-        OnDead.Invoke();
+        
     }
 }

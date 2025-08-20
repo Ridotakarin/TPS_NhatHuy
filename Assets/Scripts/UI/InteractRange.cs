@@ -17,8 +17,8 @@ public class InteractRange : MonoBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private EnemySpawn enemySpawn;
 
-    private ManualShooting manual;
-    private AutomaticShooting automatic;
+    public ManualShooting manual;
+    public AutomaticShooting automatic;
     
     private bool isPanelActive = false;
 
@@ -32,8 +32,7 @@ public class InteractRange : MonoBehaviour
             {
                 playerPosition = player.transform;
                 playerData = player.GetComponent<PlayerData>();
-                manual = player.GetComponentInChildren<ManualShooting>();
-                automatic = player.GetComponentInChildren<AutomaticShooting>();
+                
             }
             
         }
