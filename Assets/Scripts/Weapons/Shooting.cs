@@ -67,4 +67,5 @@ public abstract class Shooting : MonoBehaviour
     }
 
     public abstract void UpdateText();
+    public abstract void ReloadAmmo();
 }

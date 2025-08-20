@@ -14,11 +14,16 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private GameObject crossHair;
     [SerializeField] private GameObject normalCH;
     [SerializeField] private GameObject powerCH;
+    [SerializeField] private Material normalMats;
+    [SerializeField] private Material powerMats;
     [SerializeField] private GameObject _aimLight;
     [SerializeField] private GameObject _flashLight;
+    [SerializeField] private GameObject gun;
+
 
     [SerializeField] private ThirdPersonController thirdPersonController;
     [SerializeField] private Animator animator;
+
 
     // =========================================================================
     [Header("Gun Switching")]
@@ -29,6 +34,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private Shooting _powerGunScript;
     private Shooting _currentGunScript;
     private bool _hasPowerGun = false;
+
+    private SkinnedMeshRenderer _skinnedMeshRenderer;
 
     // UnityEvent để các script khác, như UI, có thể lắng nghe
     public UnityEvent<GameObject> OnGunSwitched;
@@ -47,6 +54,8 @@ public class ThirdPersonShooterController : MonoBehaviour
         thirdPersonController = GetComponent<ThirdPersonController>();
         animator = GetComponent<Animator>();
         aimVirtualCamera = GameObject.FindAnyObjectByType<CinemachineCamera>();
+
+        if(gun!=null) _skinnedMeshRenderer = gun.GetComponent<SkinnedMeshRenderer>();
 
         _aimLight = GameObject.Find("Aim Light");
         _flashLight = GameObject.Find("Flash Light");
@@ -103,11 +112,16 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             SwitchGuns(_normalGunScript);
             crossHair = normalCH;
+            _skinnedMeshRenderer.material = normalMats;
+
+
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) && _hasPowerGun && _currentGunScript != _powerGunScript)
         {
             SwitchGuns(_powerGunScript);
             crossHair = powerCH;
+            _skinnedMeshRenderer.material = powerMats;
+
 
         }
     }

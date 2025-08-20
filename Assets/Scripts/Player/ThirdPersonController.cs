@@ -201,10 +201,8 @@ public class ThirdPersonController : MonoBehaviour
         // if there is an input and camera position is not fixed
         if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
         {
-            // Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            // Determine sensitivity based on whether the player is aiming
             float sensitivity = _input.aiming ? 0.1f : 1.0f;
 
             // Apply camera rotation based on input and sensitivity
@@ -254,6 +252,7 @@ public class ThirdPersonController : MonoBehaviour
         // if there is no input, set the target speed to 0
         if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
+            
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
@@ -291,8 +290,10 @@ public class ThirdPersonController : MonoBehaviour
                                   _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
+                
+                
 
-                // rotate to face input direction relative to camera position
+            // rotate to face input direction relative to camera position
             if (_moveRotation)    
             { 
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f); }
@@ -310,6 +311,7 @@ public class ThirdPersonController : MonoBehaviour
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+                
             }
         }
 
@@ -343,6 +345,9 @@ public class ThirdPersonController : MonoBehaviour
                 if (_hasAnimator)
                 {
                     _animator.SetBool(_animIDJump, true);
+                    
+
+
                 }
             }
 
@@ -368,6 +373,7 @@ public class ThirdPersonController : MonoBehaviour
                 if (_hasAnimator)
                 {
                     _animator.SetBool(_animIDFall, true);
+                   
                 }
             }
 

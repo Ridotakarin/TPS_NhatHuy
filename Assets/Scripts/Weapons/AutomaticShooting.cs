@@ -19,15 +19,9 @@ public class AutomaticShooting : Shooting
     {
         _animator = GameObject.FindAnyObjectByType<ThirdPersonController>().GetComponent<Animator>();
         inputSettings = GameObject.FindAnyObjectByType<InputSettingScript>();
-
-        // Số đạn mặc định
-        maxAmmoInClip = 40;
-        currentAmmo = maxAmmoInClip;
-        totalAmmo = maxAmmoInClip * totalClips - currentAmmo;
-        // Số băng đạn dự trữ
-        totalClips = 5;
-        // Thời gian nạp đạn
-        reloadTime = 3f;
+        
+        ReloadAmmo();
+        
     }
 
 
@@ -83,6 +77,7 @@ public class AutomaticShooting : Shooting
     {
         _animator.SetLayerWeight(1, Mathf.Lerp(_animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
         _animator.SetBool("Reload", true);
+        AudioManager.Instance.OnReload();
         yield return new WaitForSeconds(reloadTime);
         _animator.SetBool("Reload", false);
 
@@ -114,5 +109,18 @@ public class AutomaticShooting : Shooting
     {
         ammoText.text = "Ammo: "+currentAmmo.ToString();
         magazineText.text = "Total: " + totalAmmo.ToString();
+    }
+    public override void ReloadAmmo()
+    {
+        // Số đạn mặc định
+        maxAmmoInClip = 40;
+        currentAmmo = maxAmmoInClip;
+        
+        // Số băng đạn dự trữ
+        totalClips = 5;
+        // Thời gian nạp đạn
+        reloadTime = 3f;
+        totalAmmo = maxAmmoInClip * totalClips;
+        UpdateText();
     }
 }

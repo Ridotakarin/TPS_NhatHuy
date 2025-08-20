@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.UI;
 
 // Lớp cho súng bán tự động, kế thừa từ Shooting
 public class ManualShooting : Shooting
@@ -16,17 +17,8 @@ public class ManualShooting : Shooting
         _animator = GameObject.FindAnyObjectByType<ThirdPersonController>().GetComponent<Animator>();
         inputSettings = GameObject.FindAnyObjectByType<InputSettingScript>();
 
-
-        // Số đạn mặc định
-        maxAmmoInClip = 1;
-        currentAmmo = maxAmmoInClip;
-        // Số băng đạn dự trữ
-        totalClips = 10;
-        // Thời gian nạp đạn
-        reloadTime = 3f;
-        totalAmmo = maxAmmoInClip * totalClips ;
-
-        UpdateText();
+        ReloadAmmo();
+        
 
     }
 
@@ -68,6 +60,7 @@ public class ManualShooting : Shooting
             Debug.Log("Bắt đầu nạp đạn (súng bán tự động)...");
             // Kích hoạt animation reload ở đây
             _animator.SetBool("Reload", true);
+            AudioManager.Instance.OnReload();
             StartCoroutine(ReloadCoroutine());
         }
         else if (totalAmmo <= 0)
@@ -100,5 +93,17 @@ public class ManualShooting : Shooting
     {
         ammoText.text = "Ammo: " + currentAmmoInClip.ToString();
         magazineText.text = "Total: " + totalAmmo.ToString();
+    }
+    public override void ReloadAmmo()
+    {
+        // Số đạn mặc định
+        maxAmmoInClip = 1;
+        currentAmmo = maxAmmoInClip;
+        // Số băng đạn dự trữ
+        totalClips = 10;
+        // Thời gian nạp đạn
+        reloadTime = 3f;
+        totalAmmo = maxAmmoInClip * totalClips;
+        UpdateText();
     }
 }

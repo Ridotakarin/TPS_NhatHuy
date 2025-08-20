@@ -5,7 +5,7 @@ public class GunRaycasting : MonoBehaviour
     [SerializeField] private Transform _firingPos;
     [SerializeField] private Transform _aimingCamera;
     [SerializeField] private Transform _hitMarkerPrefab;
-    [SerializeField] private int _damage;
+    [SerializeField] private float _damage = 10;
     [SerializeField] private Transform _firePrefabs;
 
     public void PerformRaycast()
@@ -15,9 +15,14 @@ public class GunRaycasting : MonoBehaviour
         if (Physics.Raycast(aimingRay, out var raycasthit))
         {
             var rayHit = Instantiate(_hitMarkerPrefab, raycasthit.point, Quaternion.LookRotation(raycasthit.normal), parent: raycasthit.collider.transform);
-            if (raycasthit.collider.TryGetComponent<Health>(out var health))
+            if (raycasthit.collider.TryGetComponent<Mutant>(out var mutan))
             {
-                health.TakeDamage(_damage);
+
+                mutan.TakeDamage(_damage);
+            }
+            if (raycasthit.collider.TryGetComponent<Mob>(out var mob))
+            {
+                mob.TakeDamage(_damage);
             }
 
         }

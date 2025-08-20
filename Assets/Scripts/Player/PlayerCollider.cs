@@ -1,27 +1,36 @@
+using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerCollider : MonoBehaviour
 {
-    private Health health;
+    [SerializeField] private InputActionReference _interact;
+
+    private PlayerData playerData;
     private int damage;
 
 
     private void Start()
     {
-        health = GetComponent<Health>();
+        playerData = GetComponent<PlayerData>();
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Mob") == true)
         {
             damage = 5;
-            health.TakeDamage(damage);
+            playerData.TakeDamage(damage);
+            AudioManager.Instance.GetHurt();
+
         }
         else if (collision.gameObject.CompareTag("Boss") == true)
         {
             damage = 10;
-            health.TakeDamage(damage);
-            
+            playerData.TakeDamage(damage);
+            AudioManager.Instance.GetHurt();
+
         }
+        
     }
+    
 }

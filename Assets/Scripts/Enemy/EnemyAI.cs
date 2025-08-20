@@ -3,13 +3,16 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    public Mob mob;
     public Transform targetPlayer;
     public float chaseDistance = 15f;
     public float attackDistance = 2f;
 
+
     private NavMeshAgent agent;
     private Animator animator;
     private bool isDead = false; 
+
 
     void Start()
     {
@@ -21,10 +24,14 @@ public class EnemyAI : MonoBehaviour
             GameObject player = GameObject.Find("Space_Solider");
             if (player != null) targetPlayer = player.transform;
         }
+        mob = GetComponent<Mob>();
     }
 
     void Update()
     {
+        
+        if(mob.currentHealth <= 0) SetDead();
+
         if (isDead) return;
 
         if (targetPlayer == null) return;
@@ -59,6 +66,6 @@ public class EnemyAI : MonoBehaviour
         isDead = true;
         agent.isStopped = true;
         animator.SetBool("Move", false);
-        animator.enabled = false; 
+        
     }
 }

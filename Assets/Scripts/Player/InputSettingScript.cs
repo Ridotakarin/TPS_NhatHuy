@@ -61,6 +61,8 @@ public class InputSettingScript : MonoBehaviour
     public void MoveInput( Vector2 newMoveDirection)
     {
         move = newMoveDirection;
+        
+        
     }
     public void LookInput(Vector2 newLookDirection)
     {
@@ -69,6 +71,7 @@ public class InputSettingScript : MonoBehaviour
     public void JumpInput(bool newJumpState)
     {
         jump = newJumpState;
+        
     }
     public void SprintInput(bool newSprintState)
     {

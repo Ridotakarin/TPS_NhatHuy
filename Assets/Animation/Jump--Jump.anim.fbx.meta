@@ -96,7 +96,8 @@ ModelImporter:
       - time: 0.1615599
         functionName: OnLand
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 8300000, guid: d921545721392114d8cb477f23b232ca,
+          type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

@@ -4,8 +4,11 @@ using UnityEngine.UI;
 public class UI_PlayerHealth : MonoBehaviour
 {
     [SerializeField] private ThirdPersonController _thirdPersonController;
-    [SerializeField] private Health _playerHealth;
+    [SerializeField] private PlayerData _playerHealth;
     [SerializeField] private Text _health;
+    [SerializeField] private GameObject tutorialPanel;
+    [SerializeField] private GameObject settingPanel;
+    [SerializeField] private GameObject gameoverPanel;
 
     
 
@@ -17,7 +20,7 @@ public class UI_PlayerHealth : MonoBehaviour
         }
         if (_playerHealth == null)
         {
-            _playerHealth = GameObject.Find("Space_Solider").GetComponent<Health>();
+            _playerHealth = GameObject.Find("Space_Solider").GetComponent<PlayerData>();
         }
     }
 

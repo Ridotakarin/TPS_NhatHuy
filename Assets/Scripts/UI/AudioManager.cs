@@ -6,8 +6,9 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
+    
 
-    [SerializeField] private AudioClip buttonClick, fireSFX,missile,heal, destroy;
+    [SerializeField] private AudioClip buttonClick,heal, reload,pick,unlock, hurt, dead,jump,land;
 
     private void Awake()
     {
@@ -45,9 +46,19 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat("SfxVolume", volume);
     }
     public void PlaySFX(AudioClip sfx) => sfxSource.PlayOneShot(sfx);
-    public void OnFire() => PlaySFX(fireSFX);
-    public void OnMissile() => PlaySFX(missile);
     public void OnClick() => PlaySFX(buttonClick);
-    public void OnDestroyed() => PlaySFX(destroy);
+    public void OnReload() => PlaySFX(reload);
     public void OnHeal() => PlaySFX(heal);
+    public void OnPickUP() => PlaySFX(pick);
+    public void OnUnlock() => PlaySFX(unlock);
+    public void GetHurt() => PlaySFX(hurt);
+    public void IsDead() => PlaySFX(dead);
+    
+    public void Jump() => PlaySFX(jump);
+    public void Land() => PlaySFX(land);
+    public void PlayBossMussic()
+    {
+        musicSource.Play();
+    }
+   
 }
