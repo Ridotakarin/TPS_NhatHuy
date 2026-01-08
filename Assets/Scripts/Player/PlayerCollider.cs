@@ -9,10 +9,12 @@ public class PlayerCollider : MonoBehaviour
     private PlayerData playerData;
     private int damage;
 
+    [SerializeField] private Animator Animator;
 
     private void Start()
     {
         playerData = GetComponent<PlayerData>();
+        Animator = GetComponent<Animator>();
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -21,6 +23,7 @@ public class PlayerCollider : MonoBehaviour
             damage = 5;
             playerData.TakeDamage(damage);
             AudioManager.Instance.GetHurt();
+            Animator.SetTrigger("GetHurt");
 
         }
         else if (collision.gameObject.CompareTag("Boss") == true)
@@ -28,9 +31,10 @@ public class PlayerCollider : MonoBehaviour
             damage = 10;
             playerData.TakeDamage(damage);
             AudioManager.Instance.GetHurt();
+            Animator.SetTrigger("GetHurt");
 
         }
-        
+
     }
     
 }
