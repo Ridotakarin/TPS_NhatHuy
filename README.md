@@ -1,50 +1,104 @@
-# 🔫 Third-Person Shooter (TPS) - Nhat Huy Project
+<a name="readme-top"></a>
 
-![Unity](https://img.shields.io/badge/Unity-2022.3+-black?style=for-the-badge&logo=unity)
-![C#](https://img.shields.io/badge/C%23-Language-blue?style=for-the-badge&logo=csharp)
-![Status](https://img.shields.io/badge/Status-In--Development-orange?style=for-the-badge)
+<p align="center">
+  <img src="README_assets/Banner.png" width="100%" alt="TPS Project Banner"/>
+</p>
 
-Dự án phát triển cơ chế điều khiển nhân vật góc nhìn thứ ba (TPS) tập trung vào tính chân thực của chuyển động, hệ thống chiến đấu Raycast và tối ưu hóa hiệu suất thông qua các Design Patterns.
+<h1 align="center">🔫 Advanced TPS Gameplay Framework</h1>
 
----
-
-## 📸 Demo & Hình ảnh
-*(Bạn hãy thay link ảnh thực tế của bạn vào các dấu ngoặc bên dưới)*
-
-| Main Gameplay | Aiming System |
-| :---: | :---: |
-| ![Gameplay 1](https://via.placeholder.com/400x225.png?text=Main+Locomotion) | ![Gameplay 2](https://via.placeholder.com/400x225.png?text=Combat+Mechanics) |
+<p align="center">
+  <img src="https://img.shields.io/badge/Creator-Nhat%20Huy-red?style=for-the-badge&logo=github" />
+  <img src="https://img.shields.io/badge/Engine-Unity-black?style=for-the-badge&logo=unity" />
+  <img src="https://img.shields.io/badge/Architecture-Modular-blue?style=for-the-badge" />
+</p>
 
 ---
 
-## 🕹️ Cơ chế & Tính năng kỹ thuật (Mechanics)
+## 👋 About This Project
 
-### 1. Hệ thống di chuyển (Character Locomotion)
-* **Movement:** Sử dụng **Character Controller** kết hợp với **Animator Blend Trees** để tạo chuyển động 8 hướng mượt mà.
-* **States:** Quản lý trạng thái bằng **State Machine** (Idle, Walk, Run, Aim, Shoot, Reload).
-* **Camera:** Tích hợp **Cinemachine** hỗ trợ xoay camera tự do và tự động chuyển góc nhìn (Shoulder Offset) khi ngắm bắn.
+Welcome to **TPS_NhatHuy**. This project showcases a high-fidelity **Third-Person Shooter framework** built from the ground up. 
 
-### 2. Hệ thống chiến đấu (Combat System)
-* **Raycast Shooting:** Xử lý bắn súng dựa trên Raycasting để đảm bảo độ chính xác tuyệt đối theo tâm ngắm.
-* **Recoil & Precision:** Lập trình độ giật (Recoil) của súng và độ lệch tâm (Weapon Spread) dựa trên trạng thái di chuyển của nhân vật.
-* **VFX/SFX:** Tích hợp Muzzle Flash, Bullet Tracer và hệ thống decal vết đạn trên các bề mặt vật lý khác nhau.
-
-### 3. Tối ưu hóa mã nguồn (Technical Highlights)
-* **Object Pooling:** Áp dụng cho đạn, vỏ đạn và các hiệu ứng va chạm để giảm thiểu rác (GC) và duy trì FPS ổn định.
-* **Observer Pattern:** Sử dụng C# Events để tách biệt (Decoupling) giữa logic chiến đấu và hệ thống UI (Máu, Đạn).
-* **Scriptable Objects:** Lưu trữ thông số vũ khí (Sát thương, Tốc độ bắn, Thay đạn) giúp dễ dàng cân bằng game mà không cần sửa code.
+I focused on creating a responsive multi-speed movement system and a tactical combat loop where positioning and resource management (keys and health) are vital to progressing through the mission.
 
 ---
 
-## 🛠️ Công nghệ sử dụng
-* **Engine:** Unity 2022.3 (LTS)
-* **Scripting:** C# (Object-Oriented Programming)
-* **Version Control:** Git & GitHub Desktop
-* **Assets:** Starter Assets (Third Person Controller), Mixamo Animations.
+## 🎬 Gameplay Gallery
+
+This section demonstrates the core systems scripted within this project:
+
+### 1. Multi-Tiered Locomotion
+The movement script handles three distinct states: **Walking** (Stealth/Precision), **Running** (Standard), and **Sprinting** (Fast Travel/Evasion).
+<p align="center">
+  <img src="README_assets/movement_demo.gif" width="90%" />
+</p>
+
+### 2. Tactical Combat & Weapon Swapping
+You can switch between a precision **Rifle** and a heavy **Plasma Gun**. Note: Fire logic is locked until the player enters the "Aim" state.
+<p align="center">
+  <img src="README_assets/combat_demo.gif" width="90%" />
+</p>
+
+### 3. Mission Objectives & Survival
+The environment features interactive **Medical Kits** for survival and a **Key-Access system** required to unlock the final Boss Room.
+<p align="center">
+  <img src="README_assets/items_key.gif" width="90%" />
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
 
-## 🚀 Cách chạy dự án
-1. **Clone Repo:**
-   ```bash
-   git clone [https://github.com/Ridotakarin/TPS_NhatHuy.git](https://github.com/Ridotakarin/TPS_NhatHuy.git)
+## ⚔️ Arsenal & Equipment
+
+I engineered the weapons to provide two completely different tactical feels:
+
+| Weapon | Logic Type | Style | Feature |
+| :--- | :--- | :--- | :--- |
+| **Rifle ** | Raycast | Precision | Fast fire rate; best for medium range. |
+| **Plasma Gun ** | Projectile | Heavy / AoE | Grenade-style arc; high damage energy bolts. |
+
+* **Combat Constraint:** Integrated a "Ready-to-Fire" check requiring the player to hold the **Aim** button before the trigger can be pulled.
+
+---
+
+## ⚙️ Core Mechanics (The Code)
+
+### 🧠 Locomotion Logic
+The character's velocity is calculated based on three input modifiers:
+* **Ctrl (Hold):** Walk (Low speed for tight spaces).
+* **Move (Basic):** Jog/Run (Standard exploration).
+* **Shift (Hold):** Sprint (High-speed movement).
+
+### 🔑 Mission System
+- **Keycard System:** A Boolean-based verification script. The Boss Room door remains locked until the `hasKey` event is triggered.
+- **Interactive Loot:** Medical kits use a trigger-based collision system to restore HP and update the UI dynamically.
+
+---
+
+## 🚀 Installation & Controls
+
+### ⚙️ Quick Start
+1. **Clone:** `git clone https://github.com/Ridotakarin/TPS_NhatHuy.git`
+2. **Open:** Unity 2022.3 LTS or higher.
+3. **Play:** Load `Assets/Scenes/Main.unity`.
+
+### ⌨️ Controls
+- **WASD:** Move (Run by default)
+- **Left Ctrl (Hold):** Walk
+- **Left Shift (Hold):** Sprint
+- **Right Click (Hold):** **AIM** (Required to shoot)
+- **Left Click:** Fire Weapon
+- **Key 1 / 2:** Switch between Rifle and Plasma Gun
+- **F / E:** Pick up Key / Medical Kit
+
+---
+
+## 👤 Contact the Creator
+**Lâm Nhật Huy** - Gameplay Programmer
+* **LinkedIn:** [Huy Lâm](https://www.linkedin.com/in/huy-lâm-3405142a5)
+* **GitHub Portfolio:** [Ridotakarin](https://github.com/Ridotakarin)
+
+---
+<p align="center">
+  If you find this framework helpful, please give it a ⭐!
+</p>
