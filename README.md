@@ -96,9 +96,9 @@ The character's velocity is calculated based on three input modifiers:
 ## 👤 Contact the Creator
 **Lâm Nhật Huy** - Gameplay Programmer
 * **LinkedIn:** [Huy Lâm](https://www.linkedin.com/in/huy-lâm-3405142a5)
-* **GitHub Portfolio:** [Ridotakarin](https://github.com/Ridotakarin)
+* **Email:** [huylam27503@gmail.com]
 
 ---
 <p align="center">
-  If you find this framework helpful, please give it a ⭐!
+  Hope you find this project interesting!!! ☻
 </p>
