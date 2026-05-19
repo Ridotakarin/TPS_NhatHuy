@@ -1,10 +1,10 @@
 <a name="readme-top"></a>
 
 <p align="center">
-  <img src="README_assets/Banner.png" width="100%" alt="TPS Project Banner"/>
+  <img src="README_assets/banner.png" width="100%" alt="TPS Project Banner"/>
 </p>
 
-<h1 align="center">🔫 Advanced TPS Gameplay Framework</h1>
+<h1 align="center"> Advanced TPS Gameplay Framework</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Creator-Nhat%20Huy-red?style=for-the-badge&logo=github" />
@@ -29,19 +29,25 @@ This section demonstrates the core systems scripted within this project:
 ### 1. Multi-Tiered Locomotion
 The movement script handles three distinct states: **Walking** (Stealth/Precision), **Running** (Standard), and **Sprinting** (Fast Travel/Evasion).
 <p align="center">
-  <img src="README_assets/movement_demo.gif" width="90%" />
+  
+  <img src="README_assets/TPS_walk.gif" width="30%" />
+  <img src="README_assets/TPS_running.gif" width="30%" />
+  <img src="README_assets/TPS_sprint.gif" width="30%" />
 </p>
 
 ### 2. Tactical Combat & Weapon Swapping
 You can switch between a precision **Rifle** and a heavy **Plasma Gun**. Note: Fire logic is locked until the player enters the "Aim" state.
 <p align="center">
-  <img src="README_assets/combat_demo.gif" width="90%" />
+  <img src="README_assets/TPS_switch.gif" width="90%" />
 </p>
 
 ### 3. Mission Objectives & Survival
 The environment features interactive **Medical Kits** for survival and a **Key-Access system** required to unlock the final Boss Room.
 <p align="center">
-  <img src="README_assets/items_key.gif" width="90%" />
+  <img src="README_assets/variety_item.png" width="45%" />
+ 
+  <img src="README_assets/lockdoor.png" width="45%" />
+  
 </p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -57,8 +63,19 @@ I engineered the weapons to provide two completely different tactical feels:
 | **Rifle ** | Raycast | Precision | Fast fire rate; best for medium range. |
 | **Plasma Gun ** | Projectile | Heavy / AoE | Grenade-style arc; high damage energy bolts. |
 
+<table align="center">
+  <tr>
+    <td align="center"><b>Rifle</b></td>
+    <td align="center"><b>Plasma</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="README_assets/TPS_shoot_rifle.gif" width="90%" />
+    <td align="center"><img src="README_assets/TPS_shoot_plasma.gif" width="90%" />
+  </tr>
+</table>
+  
 * **Combat Constraint:** Integrated a "Ready-to-Fire" check requiring the player to hold the **Aim** button before the trigger can be pulled.
-
+<p align= "centre"><img src="README_assets/TPS_aim.gif" width="95%" /></p>
 ---
 
 ## ⚙️ Core Mechanics (The Code)
